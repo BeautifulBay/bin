@@ -330,7 +330,7 @@ function _mGrep()
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	if [ ${COMP_CWORD} -eq 1 ]
 	then
-		local opts="`ls ~/bin/`"
+		local opts="`ls ~/.bin/`"
 		COMPREPLY=($(compgen -W "$opts" -- $cur))
 		return 0
 	fi
@@ -340,9 +340,9 @@ alias dtsParse='
 function _parseDts()
 { 
 	if [ "x$2" == "x" ]; then 
-		~/bin/parseDts.py $1
+		~/.bin/parseDts.py $1
 	else 
-		~/bin/parseDts.py $1 | xargs grep --color=auto -n $2
+		~/.bin/parseDts.py $1 | xargs grep --color=auto -n $2
 	fi 
 	unset -f _parseDts
 } 
@@ -354,7 +354,7 @@ function _dtsParse()
 	local cur="${COMP_WORDS[COMP_CWORD]}"
 	if [ ${COMP_CWORD} -eq 1 ]
 	then
-		local opts="`ls *-qrd-*`"
+		local opts="`ls *-mtp*`"
 		COMPREPLY=($(compgen -W "$opts" -- $cur))
 		return 0
 	fi
@@ -437,7 +437,30 @@ function Analyse()
 
 function autoDir()
 {
-	~/bin/autoDir.py $1
+	~/.bin/autoDir.py $1
+}
+
+function _download()
+{
+	local opts="boot aboot system userdata tz devcfg"
+	_completeFunc "$opts" 1
+}
+
+function Download()
+{
+	adb reboot bootloader
+	case $1 in
+		"devcfg" | "tz")
+			fastboot flash $1 $1.mbn
+			;;
+		"aboot")
+			fastboot flash $1 emmc_appsboot.mbn
+			;;
+		*)
+			fastboot flash $1 $1.img
+			;;
+	esac
+	fastboot reboot
 }
 
 complete -F _mGrep mHistoryGrep
@@ -448,5 +471,6 @@ complete -F _makeAndroid mAndroid
 complete -F _makeimage mImage
 complete -F _dtsParse dtsParse
 complete -F _repo repo
+complete -F _download Download
 complete -f -d Analyse
 complete -f -d autoDir 
