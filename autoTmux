@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $(tmux has -t cmd) ]; then
+	:
+else
+	tmux new-session -n ACE2_make -d -s ace2
+	tmux new-window  -n ACE2_out  -t ace2
+	tmux new-window  -n ACE2_src  -t ace2
+	tmux new-window  -n adb       -t ace2
+	tmux new-window  -n Share     -t ace2
+
+	tmux new-session -n CP10_make -d -s cp10
+	tmux new-window  -n CP10_out  -t cp10
+	tmux new-window  -n CP10_src  -t cp10
+	tmux new-window  -n adb       -t cp10
+	tmux new-window  -n Share     -t cp10
+	tmux a
+fi
