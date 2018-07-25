@@ -284,7 +284,7 @@ function mAndroid
 
 function _makeimage
 {
-	local opts="bootimage aboot systemimage recoveryimage otapackage all update-api vendorimage"
+	local opts="bootimage aboot systemimage recoveryimage otapackage update-api vendorimage"
 	local opts2="-j8 -j16 -j32"
 	_completeFunc "$opts" 1 "$opts2" 2
 }
@@ -448,6 +448,7 @@ function _download()
 
 function Download()
 {
+	#adb wait-for-device; adb reboot bootloader
 	adb reboot bootloader
 	case $1 in
 		"devcfg" | "tz")
