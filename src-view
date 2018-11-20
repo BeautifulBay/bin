@@ -1,0 +1,5 @@
+#!/bin/bash
+
+find . $1 -name "*.h" -o -name "*.c" -o -name "*.cc" -o -name "*.cpp" -o -name "*.java" -o -name "*.xml"> /tmp/files.list
+cscope -bkq -i /tmp/files.list
+# ctags -L /tmp/files.list

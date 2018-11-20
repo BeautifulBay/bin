@@ -248,7 +248,7 @@ function _makeAndroid
 		echo "You are not in an Android project"
 		return
 	fi
-	local opts="$(ls device/qcom/)"
+	local opts="$(find device/qcom/ -name *.mk | xargs grep PRODUCT_NAME | cut -d '=' -f 2 | sort -u)"
 	local opts2="user userdebug eng"
 	_completeFunc "$opts" 1 "$opts2" 2
 }
@@ -269,7 +269,7 @@ function mAndroid
 		fi
 		echo "source ./build/envsetup.sh"
 		source ./build/envsetup.sh
-		if [ $1x = "zx55q05_64"x -o $1x = "LS_5504"x ]
+		if [ $1x = "CP10"x -o $1x = "OmniReader"x ]
 		then 
 			echo "choosecombo 1 $1 $variant 1"
 			choosecombo 1 $1 $variant 1
@@ -456,6 +456,9 @@ function Download()
 			;;
 		"aboot")
 			fastboot flash $1 emmc_appsboot.mbn
+			;;
+		"system")
+			fastboot flash $1 $1.img -S 200m
 			;;
 		*)
 			fastboot flash $1 $1.img
